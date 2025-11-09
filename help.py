@@ -9,9 +9,8 @@ output_file = sys.argv[2] if len(sys.argv) > 2 else input_file.replace('.sh', '_
 with open(input_file, 'r') as f:
     content = f.read()
 
-# Remove T2 file paths (everything between T1.nii.gz and the next space before a flag)
-# Pattern: T1.nii.gz /path/to/T2.nii.gz -> T1.nii.gz
-content = re.sub(r'(T1\.nii\.gz) /cluster/tufts/hugheslabkp/data_irb_required/KPSC_MRI_800_nifti/STUDY_\d+/T2\.nii\.gz', r'\1', content)
+# Remove T2 file paths - match space followed by any path ending in T2.nii.gz
+content = re.sub(r' /[^\s]*T2\.nii\.gz', '', content)
 
 # Fix lesion-mask-pattern: 0 1 -> 0
 content = re.sub(r'--lesion-mask-pattern 0 1', '--lesion-mask-pattern 0', content)
